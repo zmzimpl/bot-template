@@ -7,9 +7,8 @@ export { sleep } from "./sleep.js";
 export { getDir } from "./getDir.js";
 export { getPropByStringPath } from "./getProp.js";
 
-export { logIntro, logWork, logLoader } from "./log.js";
+export { logIntro, logLoader } from "./log.js";
 
-export { getUserInfo } from "./twitter-api.js";
 export { decrypt } from "./decrypt.js";
 export { encrypt } from "./encrypt.js";
 export { agentClient } from "./proxy.js";

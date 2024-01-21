@@ -4,7 +4,6 @@ import logUpdate from "log-update";
 import { chalk } from "./chalk.js";
 import { formatDate } from "./date.js";
 import { sleep } from "./sleep.js";
-import { actionToColor } from "../constants/actionToColor.js";
 import { LOADER_FRAMES } from "../constants/index.js";
 
 export const logIntro = () => {
@@ -24,15 +23,6 @@ export const logIntro = () => {
       `👽 Supports: Twitter followers check, Pending tx watching, Auto sell if profitable.
       ❤️  Follow me on Twitter if you find it helpful: @zmzimpl `
     )
-  );
-};
-export const logWork = ({ walletAddress, actionName, subject, price }) => {
-  console.log(
-    `${chalk.cyanBright(
-      `[LOG ${walletAddress.slice(0, 6)}..${walletAddress.slice(-3)}]`
-    )} ${actionToColor[actionName](
-      actionName.toUpperCase()
-    )} > ${subject} - ${price}`
   );
 };
 

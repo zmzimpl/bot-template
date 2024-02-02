@@ -3,7 +3,6 @@ import {
   getDir,
   logIntro,
   sleep,
-  logWork,
 } from "./utils/index.js";
 import consoleStamp from "console-stamp";
 import axios from "axios";

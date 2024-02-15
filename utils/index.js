@@ -11,6 +11,6 @@ export { logIntro, logLoader } from "./log.js";
 
 export { decrypt } from "./decrypt.js";
 export { encrypt } from "./encrypt.js";
-export { agentClient } from "./proxy.js";
 export { createLogger } from "./logger.js";
 export { retry } from "./retry.js";
+export { sendEmail } from "./alert.js";

@@ -1,10 +1,13 @@
 import SibApiV3Sdk from "@getbrevo/brevo";
+import { readFileSync } from "fs";
+import { getDir } from "./index.js";
+const config = JSON.parse(readFileSync(getDir("config.json"), "utf8"));
 
 // 封装发送邮件的函数
 export function sendEmail(subject, htmlContent, recipientEmail) {
   let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
   let apiKey = apiInstance.authentications["apiKey"];
-  apiKey.apiKey = "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"; // 替换为你的API密钥
+  apiKey.apiKey = config.brevoApiKey; // 替换为你的API密钥
 
   let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 

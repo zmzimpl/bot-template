@@ -14,3 +14,4 @@ export { encrypt } from "./encrypt.js";
 export { createLogger } from "./logger.js";
 export { retry } from "./retry.js";
 export { sendEmail } from "./alert.js";
+export { BarkNotifier } from "./bark.js";

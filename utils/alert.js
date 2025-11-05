@@ -5,9 +5,9 @@ const config = JSON.parse(readFileSync(getDir("config.json"), "utf8"));
 
 // 封装发送邮件的函数
 export function sendEmail(subject, htmlContent, recipientEmail) {
-  let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-  let apiKey = apiInstance.authentications["apiKey"];
-  apiKey.apiKey = config.brevoApiKey; // 替换为你的API密钥
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  // v3.0+ 使用 setApiKey 方法设置 API 密钥
+  apiInstance.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, config.brevoApiKey);
 
   let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 

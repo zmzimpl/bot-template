@@ -6,8 +6,8 @@
     "serverUrl": "https://api.day.app",
     "deviceKey": "your-bark-device-key-here",
     "sound": "bell",
-    "level": "timeSensitive",
-    "group": "VaultMonitor",
+    "level": "active",
+    "group": "Notifications",
     "icon": ""
   }
 }

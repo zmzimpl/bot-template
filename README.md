@@ -89,7 +89,6 @@ bot-template/
 │       ├── proxy.ts          # 代理处理
 │       ├── getProp.ts        # 对象属性获取
 │       ├── bark.ts           # Bark 推送
-│       ├── alert.ts          # 告警通知
 │       ├── log.ts            # 简单日志
 │       ├── logger.ts         # Winston 日志
 │       ├── chalk.ts          # 终端颜色
@@ -156,7 +155,7 @@ factory.switchClient('impit'); // 切换回 impit
 基于 ioredis 的缓存封装，支持 TTL 和前缀。
 
 ```typescript
-import { Cache, getRedisClient, closeRedis } from './utils/cache.js';
+import { Cache, getRedisClient, disconnectRedis } from './utils/cache.js';
 
 // 创建缓存实例
 const cache = new Cache({
@@ -167,10 +166,10 @@ const cache = new Cache({
 // 基本操作
 await cache.set('user:1', { name: 'John', age: 30 });
 const user = await cache.get<User>('user:1');
-await cache.delete('user:1');
+await cache.del('user:1');
 
 // 检查是否存在
-const exists = await cache.has('user:1');
+const exists = await cache.exists('user:1');
 
 // 使用自定义 TTL
 await cache.set('session:abc', sessionData, 1800);  // 30分钟过期
@@ -179,7 +178,7 @@ await cache.set('session:abc', sessionData, 1800);  // 30分钟过期
 await cache.clear();
 
 // 关闭连接
-await closeRedis();
+await disconnectRedis();
 ```
 
 ### 并发控制 (`src/utils/queue.ts`)
@@ -236,7 +235,7 @@ import {
   multiply,
   divide,
   format,
-  toFixed,
+  formatWithCommas,
   compare,
   min,
   max,
@@ -247,19 +246,19 @@ import {
 } from './utils/bignumber.js';
 
 // 基本运算
-const sum = add('0.1', '0.2');           // 0.3（精确）
-const diff = subtract('1', '0.1');        // 0.9
-const product = multiply('0.1', '0.2');   // 0.02
-const quotient = divide('1', '3');        // 0.333...
+const sum = add('0.1', '0.2');           // BigNumber(0.3)
+const diff = subtract('1', '0.1');        // BigNumber(0.9)
+const product = multiply('0.1', '0.2');   // BigNumber(0.02)
+const quotient = divide('1', '3');        // BigNumber(0.333...)
 
 // 格式化
-format(1234567.89);                       // "1,234,567.89"
-toFixed(1.23456, 2);                      // "1.23"
+format(1234567.89, 2);                    // "1234567.89"
+formatWithCommas(1234567.89, 2);          // "1,234,567.89"
 
 // 比较
 compare('1.0', '1');                      // 0（相等）
-min('1', '2', '3');                       // BigNumber(1)
-max('1', '2', '3');                       // BigNumber(3)
+min('1', '2');                            // BigNumber(1)
+max('1', '2');                            // BigNumber(2)
 
 // 检查
 isZero('0');                              // true
@@ -267,7 +266,7 @@ isPositive('1');                          // true
 isNegative('-1');                         // true
 
 // 百分比计算
-percentage('50', '200');                  // 25（50 是 200 的 25%）
+percentage('200', '50');                  // BigNumber(100)（200 的 50%）
 ```
 
 ### 日期处理 (`src/utils/date.ts`)
@@ -276,61 +275,57 @@ percentage('50', '200');                  // 25（50 是 200 的 25%）
 
 ```typescript
 import {
-  now,
-  today,
+  dayjs,
+  formatDate,
+  formatISO,
   format,
-  parse,
-  addTime,
-  subtractTime,
+  fromNow,
+  toNow,
+  isBefore,
+  isAfter,
+  add,
+  subtract,
   diff,
   startOf,
   endOf,
-  isBefore,
-  isAfter,
-  isSame,
-  isBetween,
-  fromNow,
-  toNow,
   unix,
   fromUnix,
+  isValid,
 } from './utils/date.js';
 
 // 当前时间
-now();                                    // Dayjs 对象
-today();                                  // 今天 00:00:00
+dayjs();                                  // Dayjs 对象
 
 // 格式化
-format(new Date());                       // "2024-01-15 10:30:00"
-format(new Date(), 'YYYY/MM/DD');        // "2024/01/15"
-
-// 解析
-parse('2024-01-15');                      // Dayjs 对象
-parse('2024-01-15', 'YYYY-MM-DD');
+formatDate(new Date());                   // "2024/01/15 10:30:00"
+formatISO(new Date());                    // "2024-01-15T02:30:00.000Z"
+format(new Date(), 'YYYY-MM-DD');         // "2024-01-15"
 
 // 时间运算
-addTime(now(), 1, 'day');                 // 明天
-subtractTime(now(), 1, 'week');           // 上周
+add(new Date(), 1, 'day');                // 明天的 Date 对象
+subtract(new Date(), 1, 'week');          // 上周的 Date 对象
 
 // 时间差
 diff(date1, date2, 'day');                // 相差天数
 
 // 时间边界
-startOf(now(), 'month');                  // 本月第一天
-endOf(now(), 'month');                    // 本月最后一天
+startOf(new Date(), 'month');             // 本月第一天
+endOf(new Date(), 'month');               // 本月最后一天
 
 // 比较
-isBefore(date1, date2);
-isAfter(date1, date2);
-isSame(date1, date2, 'day');
-isBetween(date, start, end);
+isBefore(date1, date2);                   // true/false
+isAfter(date1, date2);                    // true/false
 
 // 相对时间
 fromNow(pastDate);                        // "2 hours ago"
 toNow(futureDate);                        // "in 3 days"
 
 // Unix 时间戳
-unix(now());                              // 秒级时间戳
-fromUnix(1705299000);                     // Dayjs 对象
+unix(new Date());                         // 秒级时间戳
+fromUnix(1705299000);                     // Date 对象
+
+// 验证
+isValid('2024-01-15');                    // true
 ```
 
 ### 模糊匹配 (`src/utils/fuzzy.ts`)
@@ -344,10 +339,10 @@ import {
   tokenSortRatio,
   tokenSetRatio,
   weightedRatio,
-  quickRatio,
   extractBest,
   extractAll,
-  fuzzyMatch,
+  findSimilar,
+  isSimilar,
 } from './utils/fuzzy.js';
 
 // 基本相似度（0-100）
@@ -363,38 +358,46 @@ weightedRatio('hello', 'helo');           // 使用多种算法加权
 
 // 从列表中提取最佳匹配
 const choices = ['apple', 'banana', 'orange', 'grape'];
-extractBest('aple', choices);             // { choice: 'apple', score: 90 }
+extractBest('aple', choices);
+// { value: 'apple', score: 90, index: 0 }
 
 // 提取所有匹配（按分数排序）
-extractAll('ap', choices, 50);            // 分数 >= 50 的所有匹配
+extractAll('ap', choices, { scoreThreshold: 50 });
+// [{ value: 'apple', score: 60, index: 0 }, ...]
 
-// 便捷函数
-fuzzyMatch('apple', choices, 80);         // 分数 >= 80 的匹配
+// 查找相似项
+findSimilar('apple', choices, { threshold: 80 });
+// ['apple']
+
+// 检查是否相似
+isSimilar('hello', 'helo', 80);           // true
 ```
 
 ### 加解密 (`src/utils/encrypt.ts`)
 
-XOR 加密和 MD5 哈希工具。
+AES-256-CBC 加密和 SHA-256 哈希工具。
 
 ```typescript
 import {
   encrypt,
   decrypt,
-  md5,
-  encryptWithKeys,
-  decryptWithKeys,
+  generateKey,
+  hash,
+  compareHash,
 } from './utils/encrypt.js';
 
-// 单密钥加解密
-const encrypted = encrypt('secret message', 'mykey');
-const decrypted = decrypt(encrypted, 'mykey');
+// AES-256-CBC 加解密（需要两个密钥）
+const encrypted = encrypt('secret message', 'key1', 'key2');
+const decrypted = decrypt(encrypted, 'key1', 'key2');
 
-// 双密钥加解密（使用环境变量中的密钥）
-const encrypted2 = encryptWithKeys('secret');
-const decrypted2 = decryptWithKeys(encrypted2);
+// 生成随机密钥
+const key = generateKey(32);              // 64位十六进制字符串
 
-// MD5 哈希
-md5('hello world');                       // "5eb63bbbe01eeed093cb22bb8f5acdc3"
+// SHA-256 哈希
+hash('hello world');                      // SHA-256 哈希值
+
+// 安全比较哈希（防止时序攻击）
+compareHash('hello world', hashValue);    // true/false
 ```
 
 ### 重试机制 (`src/utils/retry.ts`)
@@ -427,24 +430,28 @@ const result2 = await retryWithBackoff(
 
 ### 代理处理 (`src/utils/proxy.ts`)
 
-代理 URL 解析和 SOCKS 代理支持。
+代理 URL 解析工具。
 
 ```typescript
 import {
-  parseProxy,
-  formatProxyUrl,
-  createSocksAgent,
+  getProxy,
+  proxyToUrl,
+  validateProxy,
 } from './utils/proxy.js';
 
-// 解析代理 URL
-const proxy = parseProxy('socks5://user:pass@127.0.0.1:1080');
+// 解析代理字符串
+const proxy = getProxy('socks5://127.0.0.1:1080:user:pass');
 // { protocol: 'socks5', host: '127.0.0.1', port: '1080', username: 'user', password: 'pass' }
 
-// 格式化代理 URL
-formatProxyUrl(proxy);                    // "socks5://user:pass@127.0.0.1:1080"
+// 也支持简单格式
+const proxy2 = getProxy('127.0.0.1:1080:user:pass');
+// { protocol: 'http', host: '127.0.0.1', port: '1080', username: 'user', password: 'pass' }
 
-// 创建 SOCKS 代理 Agent
-const agent = createSocksAgent('socks5://127.0.0.1:1080');
+// 转换为 URL 格式
+proxyToUrl(proxy);                        // "socks5://user:pass@127.0.0.1:1080"
+
+// 验证代理配置
+validateProxy(proxy);                     // true/false
 ```
 
 ### Bark 推送 (`src/utils/bark.ts`)
@@ -452,21 +459,37 @@ const agent = createSocksAgent('socks5://127.0.0.1:1080');
 支持 Bark App 的推送通知。
 
 ```typescript
-import { initBark, sendBarkNotification, bark } from './utils/bark.js';
+import { BarkNotifier } from './utils/bark.js';
 
-// 初始化（使用环境变量配置）
-const barkClient = initBark();
+// 从环境变量创建实例
+const bark = BarkNotifier.fromEnv();
+
+// 或手动配置
+const bark2 = new BarkNotifier({
+  enabled: true,
+  serverUrl: 'https://api.day.app',
+  deviceKey: 'your-device-key',
+  sound: 'bell',
+  level: 'active',
+  group: 'MyApp',
+});
 
 // 发送通知
-await sendBarkNotification('标题', '内容', {
+await bark.send('标题', '内容', {
   sound: 'bell',
   group: 'MyApp',
   level: 'active',
   url: 'https://example.com',
 });
 
-// 使用便捷函数
-await bark('提醒', '这是一条测试消息');
+// 便捷方法
+await bark.success('成功', '操作完成');
+await bark.error('错误', '操作失败');
+await bark.warning('警告', '请注意');
+await bark.info('信息', '一般通知');
+
+// 检查是否启用
+bark.isEnabled();                         // true/false
 ```
 
 ### 其他工具
@@ -474,40 +497,55 @@ await bark('提醒', '这是一条测试消息');
 #### 延时函数
 
 ```typescript
-import { sleep, sleepRandom } from './utils/sleep.js';
+import { sleep, sleepMs } from './utils/sleep.js';
 
-await sleep(1000);                        // 等待 1 秒
-await sleepRandom(1000, 3000);           // 等待 1-3 秒随机时间
+await sleep(1);                           // 等待 1 秒
+await sleep(0.5);                         // 等待 0.5 秒
+await sleepMs(1000);                      // 等待 1000 毫秒
 ```
 
 #### 随机数生成
 
 ```typescript
 import {
-  randInt,
-  randFloat,
-  randString,
-  randHex,
-  randElement,
+  randint,
+  randfloat,
+  randstr,
+  randbool,
+  randpick,
   shuffle,
 } from './utils/rand.js';
 
-randInt(1, 100);                          // 1-100 随机整数
-randFloat(0, 1);                          // 0-1 随机浮点数
-randString(16);                           // 16位随机字符串
-randHex(32);                              // 32位随机十六进制
-randElement(['a', 'b', 'c']);            // 随机选择元素
-shuffle([1, 2, 3, 4, 5]);                // 打乱数组
+randint(1, 100);                          // 1-100 随机整数（含两端）
+randfloat(0, 1);                          // 0-1 随机浮点数
+randstr(16);                              // 16位随机字符串
+randbool();                               // 随机布尔值
+randbool(0.8);                            // 80% 概率返回 true
+randpick(['a', 'b', 'c']);                // 随机选择元素
+shuffle([1, 2, 3, 4, 5]);                 // 打乱数组（返回新数组）
 ```
 
 #### 对象属性获取
 
 ```typescript
-import { getProp } from './utils/getProp.js';
+import { getPropByStringPath, setPropByStringPath, hasPropByStringPath } from './utils/getProp.js';
 
 const obj = { a: { b: { c: 1 } } };
-getProp(obj, 'a.b.c');                    // 1
-getProp(obj, 'a.b.d', 'default');        // 'default'
+
+// 获取嵌套属性
+getPropByStringPath(obj, 'a.b.c');        // 1
+getPropByStringPath(obj, 'a.b.d');        // undefined
+
+// 支持数组索引
+const obj2 = { items: [{ name: 'foo' }] };
+getPropByStringPath(obj2, 'items[0].name'); // 'foo'
+
+// 设置嵌套属性
+setPropByStringPath(obj, 'a.b.d', 2);     // obj.a.b.d = 2
+
+// 检查属性是否存在
+hasPropByStringPath(obj, 'a.b.c');        // true
+hasPropByStringPath(obj, 'a.b.x');        // false
 ```
 
 ## 环境变量

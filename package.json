@@ -1,10 +1,10 @@
 {
   "name": "bot-template",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "A TypeScript bot template with HTTP/2, caching, and modern utilities",
+  "main": "dist/index.js",
   "type": "module",
-  "license": "AGPL-version-3.0",
+  "license": "AGPL-3.0",
   "private": false,
   "engines": {
     "node": ">= 20.0.0",
@@ -18,7 +18,8 @@
   "bugs": "",
   "keywords": [
     "bot",
-    "blockchain"
+    "blockchain",
+    "typescript"
   ],
   "author": {
     "name": "zmzimpl",
@@ -27,31 +28,54 @@
   },
   "contributors": [],
   "scripts": {
-    "dev": "nodemon --no-warnings --experimental-specifier-resolution=node index.js",
-    "test": "mocha --no-warnings --experimental-specifier-resolution=node",
-    "start": "node --no-warnings --experimental-specifier-resolution=node index.js"
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@getbrevo/brevo": "^3.0.1",
-    "axios": "^1.13.2",
+    "@anthropic-ai/sdk": "^0.40.0",
     "bignumber.js": "^9.3.1",
-    "chalk": "^5.6.2",
+    "cacheable-lookup": "^7.0.0",
+    "chalk": "^5.4.1",
     "console-stamp": "^3.1.2",
+    "dayjs": "^1.11.13",
     "decimal.js": "^10.6.0",
+    "dotenv": "^16.5.0",
     "ethers": "^6.15.0",
     "express": "^5.1.0",
-    "figlet": "^1.9.3",
+    "figlet": "^1.9.0",
+    "fuzzball": "^2.2.3",
+    "got": "^14.4.6",
+    "http2-wrapper": "^2.2.1",
+    "impit": "^0.7.2",
+    "ioredis": "^5.6.1",
     "lodash": "^4.17.21",
     "log-update": "^7.0.1",
+    "p-queue": "^8.1.0",
     "puppeteer": "^24.28.0",
     "readline-sync": "^1.4.10",
     "socks-proxy-agent": "^8.0.5",
     "viem": "^2.38.6",
-    "winston": "^3.18.3",
-    "ws": "^8.18.3"
+    "winston": "^3.18.0",
+    "ws": "^8.18.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "mocha": "^11.7.5",
-    "nodemon": "^3.1.10"
+    "@types/console-stamp": "^0.2.7",
+    "@types/figlet": "^1.7.0",
+    "@types/lodash": "^4.17.17",
+    "@types/node": "^22.15.29",
+    "@types/readline-sync": "^1.4.8",
+    "@types/ws": "^8.18.1",
+    "@vitest/coverage-v8": "^3.2.1",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.1"
   }
 }

@@ -1,13 +1,3 @@
 {
-  "wallets": [],
-  "brevoApiKey": "your-brevo-api-key-here",
-  "bark": {
-    "enabled": false,
-    "serverUrl": "https://api.day.app",
-    "deviceKey": "your-bark-device-key-here",
-    "sound": "bell",
-    "level": "active",
-    "group": "Notifications",
-    "icon": ""
-  }
+  "wallets": []
 }

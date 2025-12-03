@@ -49,6 +49,7 @@
     "ethers": "^6.15.0",
     "express": "^5.1.0",
     "figlet": "^1.9.0",
+    "fuzzball": "^2.2.3",
     "got": "^14.4.6",
     "http2-wrapper": "^2.2.1",
     "impit": "^0.7.2",
@@ -57,12 +58,12 @@
     "log-update": "^7.0.1",
     "p-queue": "^8.1.0",
     "puppeteer": "^24.28.0",
-    "fuzzball": "^2.2.3",
     "readline-sync": "^1.4.10",
     "socks-proxy-agent": "^8.0.5",
     "viem": "^2.38.6",
     "winston": "^3.18.0",
-    "ws": "^8.18.3"
+    "ws": "^8.18.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@types/console-stamp": "^0.2.7",

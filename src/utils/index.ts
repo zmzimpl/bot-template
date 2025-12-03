@@ -145,3 +145,68 @@ export {
 // Re-export types
 export type { FuzzyMatch } from './fuzzy.js';
 export type { RetryOptions } from './retry.js';
+
+// Validator utilities
+export {
+  z,
+  ZodError,
+  validate,
+  validateOrThrow,
+  validateSafe,
+  validateAsync,
+  createValidator,
+  validateEnv,
+  createEnvSchema,
+  envString,
+  envNumber,
+  envBoolean,
+  envEnum,
+  withDefault,
+  nullable,
+  coerceString,
+  coerceNumber,
+  coerceBoolean,
+  emailSchema,
+  urlSchema,
+  uuidSchema,
+  nonEmptyString,
+  positiveNumber,
+  nonNegativeNumber,
+  integerSchema,
+  portSchema,
+  ethAddressSchema,
+  hexStringSchema,
+  isoDateSchema,
+  unixTimestampSchema,
+  apiResponseSchema,
+  paginatedResponseSchema,
+  paginationSchema,
+  loginSchema,
+  registerSchema,
+} from './validator.js';
+
+export type {
+  ValidationResult,
+  ValidationError,
+  Infer,
+  InferInput,
+  InferOutput,
+} from './validator.js';
+
+// Circuit breaker utilities
+export {
+  CircuitBreaker,
+  CircuitBreakerError,
+  CircuitBreakerRegistry,
+  CircuitState,
+  circuitBreakerRegistry,
+  createCircuitBreaker,
+  withCircuitBreaker,
+  getCircuitBreakerHealth,
+} from './circuit-breaker.js';
+
+export type {
+  CircuitBreakerOptions,
+  CircuitBreakerStats,
+  HealthCheckResult,
+} from './circuit-breaker.js';

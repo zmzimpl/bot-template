@@ -1,6 +1,5 @@
 {
   "wallets": [],
-  "brevoApiKey": "your-brevo-api-key-here",
   "bark": {
     "enabled": false,
     "serverUrl": "https://api.day.app",

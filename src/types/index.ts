@@ -138,8 +138,6 @@ export interface Env {
   REDIS_PORT: number;
   REDIS_PASSWORD: string;
   REDIS_DB: number;
-  BREVO_API_KEY: string;
-  EMAIL_SENDER: string;
   BARK_ENABLED: boolean;
   BARK_SERVER_URL: string;
   BARK_DEVICE_KEY: string;

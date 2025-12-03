@@ -48,8 +48,6 @@ export function getEnv(): Env {
     REDIS_PORT: getEnvNumber('REDIS_PORT', 6379),
     REDIS_PASSWORD: getEnvVar('REDIS_PASSWORD', ''),
     REDIS_DB: getEnvNumber('REDIS_DB', 0),
-    BREVO_API_KEY: getEnvVar('BREVO_API_KEY', ''),
-    EMAIL_SENDER: getEnvVar('EMAIL_SENDER', ''),
     BARK_ENABLED: getEnvBoolean('BARK_ENABLED', false),
     BARK_SERVER_URL: getEnvVar('BARK_SERVER_URL', 'https://api.day.app'),
     BARK_DEVICE_KEY: getEnvVar('BARK_DEVICE_KEY', ''),

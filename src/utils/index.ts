@@ -65,9 +65,6 @@ export { createLogger, getLogger, closeLoggers } from './logger.js';
 // Retry utilities
 export { retry, retryWithBackoff } from './retry.js';
 
-// Alert utilities
-export { sendEmail, sendSimpleEmail, sendAlert } from './alert.js';
-
 // Bark notifications
 export { BarkNotifier } from './bark.js';
 

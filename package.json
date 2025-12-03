@@ -38,7 +38,6 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@getbrevo/brevo": "^3.0.1",
     "@anthropic-ai/sdk": "^0.40.0",
     "bignumber.js": "^9.3.1",
     "cacheable-lookup": "^7.0.0",
